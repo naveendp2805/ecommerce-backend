@@ -2,11 +2,18 @@ package com.naveen.ecommerce_backend.controller;
 
 import com.naveen.ecommerce_backend.model.Product;
 import com.naveen.ecommerce_backend.service.ProductService;
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -16,8 +23,32 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
     @PostMapping
-    public Product createProduct(@Valid @RequestBody Product product) {
+    public Product createProduct(@RequestParam String name,
+                                 @RequestParam String description,
+                                 @RequestParam BigDecimal price,
+                                 @RequestParam Integer stockQuantity,
+                                 @RequestParam("image") MultipartFile image) throws IOException {
+
+        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+
+        Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
+        Files.createDirectories(uploadPath);
+
+        Path filePath = uploadPath.resolve(fileName);
+        Files.write(filePath, image.getBytes());
+
+        Product product = Product.builder()
+                .name(name)
+                .description(description)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .imageUrl("/" + uploadDir + "/" + fileName)
+                .build();
+
         return productService.createProduct(product);
     }
 
@@ -32,8 +63,13 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product updateProductById(@PathVariable Long id, @Valid @RequestBody Product product) {
-        return productService.updateProductById(id, product);
+    public Product updateProductById(@PathVariable Long id,
+                                     @RequestParam String name,
+                                     @RequestParam String description,
+                                     @RequestParam BigDecimal price,
+                                     @RequestParam Integer stockQuantity,
+                                     @RequestParam(required = false) MultipartFile image) throws IOException {
+        return productService.updateProductById(id, name, description, price, stockQuantity, image);
     }
 
     @DeleteMapping("/{id}")
@@ -42,4 +78,12 @@ public class ProductController {
         return "Product with id: " + id + " has been deleted";
     }
 
+    @GetMapping("/paged")
+    public Page<Product> getProductsByPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+
+        return productService.getProductsByPage(page, size, sortBy);
+    }
 }

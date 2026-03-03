@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: ecommerce-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 12345678
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  # home login credentials
+  security:
+    user:
+      name: admin
+      password: admin
+
+  # file upload
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+file:
+  upload-dir: uploads
