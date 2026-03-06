@@ -1,6 +1,6 @@
 HELP.md
 target/
-uploads/
+../uploads/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -15,7 +15,7 @@ uploads/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+../.idea
 *.iws
 *.iml
 *.ipr
