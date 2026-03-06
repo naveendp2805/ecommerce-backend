@@ -15,20 +15,15 @@ public class GlobalExceptionHandler {
 
     // 404 Handler
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException e) {
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {
 
-        Map<String, Object> error = new HashMap<>();
+        ApiError error = new ApiError(e.getMessage());
 
-        error.put("timestamp", LocalDateTime.now());
-        error.put("status", 404);
-        error.put("error", "Not Found");
-        error.put("message", e.getMessage());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(404).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -38,17 +33,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGenericException(Exception e) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleGenericException(Exception e) {
 
-        Map<String, Object> error = new HashMap<>();
+        ApiError error = new ApiError(e.getMessage());
 
-        error.put("timestamp", LocalDateTime.now());
-        error.put("status", 500);
-        error.put("error", "Internal Server Error");
-        error.put("message", e.getMessage());
-
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(404).body(error);
     }
 
 }
