@@ -1,11 +1,13 @@
 package com.naveen.ecommerce_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -29,6 +31,9 @@ public class Product {
     @Column(length = 1000)
     private String description;
 
+    @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
+    private LocalDateTime createdAt;
+
     @NotNull(message = "Price is required.")
     @Positive(message = "Price must be greater than 0.")
     @Column(nullable = false)
@@ -40,6 +45,12 @@ public class Product {
     private Integer stockQuantity;
 
     @Size(max = 500, message = "Image URL is too long.")
+    @Column(nullable = false)
     private String imageUrl;
+
+    @PrePersist
+    public void beforeInsert(){
+        this.createdAt = LocalDateTime.now();
+    }
 
 }

@@ -33,23 +33,7 @@ public class ProductController {
                                  @RequestParam Integer stockQuantity,
                                  @RequestParam("image") MultipartFile image) throws IOException {
 
-        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-
-        Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
-        Files.createDirectories(uploadPath);
-
-        Path filePath = uploadPath.resolve(fileName);
-        Files.write(filePath, image.getBytes());
-
-        Product product = Product.builder()
-                .name(name)
-                .description(description)
-                .price(price)
-                .stockQuantity(stockQuantity)
-                .imageUrl("/" + uploadDir + "/" + fileName)
-                .build();
-
-        return productService.createProduct(product);
+        return productService.createProduct(name, description, price, stockQuantity, image);
     }
 
     @GetMapping

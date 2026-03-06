@@ -28,7 +28,29 @@ public class ProductService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    public Product createProduct(Product product) {
+    public Product createProduct(String name, String description, BigDecimal price, Integer stockQuantity, MultipartFile image) throws IOException {
+
+        String imageFileName = image.getOriginalFilename();
+        if(imageFileName == null){
+            throw new RuntimeException("Image is required");
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + imageFileName;
+
+        Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
+        Files.createDirectories(uploadPath);
+
+        Path filePath = uploadPath.resolve(fileName);
+        Files.write(filePath, image.getBytes());
+
+        Product product = Product.builder()
+                .name(name)
+                .description(description)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .imageUrl("/" + uploadDir + "/" + fileName)
+                .build();
+
         return productRepo.save(product);
     }
 
