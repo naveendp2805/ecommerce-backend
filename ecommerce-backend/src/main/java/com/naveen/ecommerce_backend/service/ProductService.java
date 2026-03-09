@@ -1,5 +1,9 @@
 package com.naveen.ecommerce_backend.service;
 
+import com.naveen.ecommerce_backend.dto.CreateProductRequest;
+import com.naveen.ecommerce_backend.dto.ProductDto;
+import com.naveen.ecommerce_backend.dto.ProductMapper;
+import com.naveen.ecommerce_backend.dto.UpdateProductRequest;
 import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
 import com.naveen.ecommerce_backend.model.Product;
 import com.naveen.ecommerce_backend.repository.ProductRepo;
@@ -13,11 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +29,14 @@ public class ProductService {
 
     private final ProductRepo productRepo;
 
+    private static final String IMAGE_URL_PREFIX = "/uploads/";
+
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    public Product createProduct(String name, String description, BigDecimal price, Integer stockQuantity, MultipartFile image) throws IOException {
+    public ProductDto createProduct(CreateProductRequest productRequest) throws IOException
+    {
+        MultipartFile image = productRequest.getImage();
 
         String imageFileName = image.getOriginalFilename();
         if(imageFileName == null){
@@ -41,68 +49,79 @@ public class ProductService {
         Files.createDirectories(uploadPath);
 
         Path filePath = uploadPath.resolve(fileName);
-        Files.write(filePath, image.getBytes());
+
+        image.transferTo(filePath);
 
         Product product = Product.builder()
-                .name(name)
-                .description(description)
-                .price(price)
-                .stockQuantity(stockQuantity)
+                .name(productRequest.getName())
+                .description(productRequest.getDescription())
+                .price(productRequest.getPrice())
+                .stockQuantity(productRequest.getStockQuantity())
                 .imageUrl("/" + uploadDir + "/" + fileName)
                 .build();
 
-        return productRepo.save(product);
+        Product saveProduct = productRepo.save(product);
+
+        return ProductMapper.toDto(saveProduct);
     }
 
-    public List<Product> getAllProducts() {
-        return productRepo.findAll();
+    public List<ProductDto> getAllProducts() {
+
+        return productRepo.findAll()
+                .stream()
+                .map(ProductMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Product getProductById(Long id) {
-        return productRepo.findById(id)
+    public ProductDto getProductById(Long id) {
+        Product product =  productRepo.findById(id)
                             .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+
+        return ProductMapper.toDto(product);
     }
 
-    public Product updateProductById(Long id,
-                                     String name,
-                                     String description,
-                                     BigDecimal price,
-                                     Integer stockQuantity,
-                                     MultipartFile image) throws IOException{
+    public ProductDto updateProductById(Long id,
+                                     UpdateProductRequest productRequest,
+                                     MultipartFile image) throws IOException
+    {
 
-        Product existingProduct = getProductById(id);
+        Product existingProduct = productRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        existingProduct.setName(name);
-        existingProduct.setDescription(description);
-        existingProduct.setPrice(price);
-        existingProduct.setStockQuantity(stockQuantity);
+        existingProduct.setName(productRequest.getName());
+        existingProduct.setDescription(productRequest.getDescription());
+        existingProduct.setPrice(productRequest.getPrice());
+        existingProduct.setStockQuantity(productRequest.getStockQuantity());
 
         if(image != null && !image.isEmpty())
         {
+            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Files.createDirectories(uploadPath);
+
             if(existingProduct.getImageUrl() != null)
             {
-                String oldfileName = existingProduct.getImageUrl().replace("/uploads/", "");
-                Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-                Path oldFilePath = uploadPath.resolve(oldfileName);
+                String oldFileName = existingProduct.getImageUrl().replace(IMAGE_URL_PREFIX, "");
+                Path oldFilePath = uploadPath.resolve(oldFileName);
                 Files.deleteIfExists(oldFilePath);
             }
 
             String newFileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-
-            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-            Files.createDirectories(uploadPath);
-
             Path newFilePath = uploadPath.resolve(newFileName);
-            Files.write(newFilePath, image.getBytes());
+
+            image.transferTo(newFilePath.toFile());
 
             existingProduct.setImageUrl("/uploads/" + newFileName);
         }
 
-        return productRepo.save(existingProduct);
+        Product updatedProduct = productRepo.save(existingProduct);
+
+        return ProductMapper.toDto(updatedProduct);
     }
 
     public void deleteProductById(Long id) {
-        Product existingProduct = getProductById(id);
+
+        Product existingProduct = productRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
         if(existingProduct.getImageUrl() != null)
         {
