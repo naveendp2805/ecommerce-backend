@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.Fetch;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -47,6 +48,10 @@ public class Product {
     @Size(max = 500, message = "Image URL is too long.")
     @Column(nullable = false)
     private String imageUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @PrePersist
     public void beforeInsert(){

@@ -14,6 +14,7 @@ public class ProductMapper {
                 .price(product.getPrice())
                 .stockQuantity(product.getStockQuantity())
                 .imageUrl(product.getImageUrl())
+                .category( product.getCategory() != null ? CategoryMapper.toDto(product.getCategory()) : null)
                 .build();
     }
 

@@ -5,7 +5,9 @@ import com.naveen.ecommerce_backend.dto.ProductDto;
 import com.naveen.ecommerce_backend.dto.ProductMapper;
 import com.naveen.ecommerce_backend.dto.UpdateProductRequest;
 import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
+import com.naveen.ecommerce_backend.model.Category;
 import com.naveen.ecommerce_backend.model.Product;
+import com.naveen.ecommerce_backend.repository.CategoryRepo;
 import com.naveen.ecommerce_backend.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,7 @@ public class ProductService {
     private final ProductRepo productRepo;
 
     private static final String IMAGE_URL_PREFIX = "/uploads/";
+    private final CategoryRepo categoryRepo;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -52,12 +55,16 @@ public class ProductService {
 
         image.transferTo(filePath);
 
+        Category category = categoryRepo.findById(productRequest.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not Found!!"));
+
         Product product = Product.builder()
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
                 .price(productRequest.getPrice())
                 .stockQuantity(productRequest.getStockQuantity())
                 .imageUrl("/" + uploadDir + "/" + fileName)
+                .category(category)
                 .build();
 
         Product saveProduct = productRepo.save(product);
@@ -78,6 +85,15 @@ public class ProductService {
                             .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
 
         return ProductMapper.toDto(product);
+    }
+
+    public List<ProductDto> getProductsByCategoryId(Long categoryId) {
+
+        return productRepo.findProductByCategoryId(categoryId)
+                .stream()
+                .map(ProductMapper::toDto)
+                .toList();
+
     }
 
     public ProductDto updateProductById(Long id,
@@ -145,4 +161,5 @@ public class ProductService {
 
         return productRepo.findAll(pageable);
     }
+
 }

@@ -29,4 +29,6 @@ public class CreateProductRequest {
 
     @NotNull(message = "Image is required")
     private MultipartFile image;
+
+    private Long categoryId;
 }

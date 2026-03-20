@@ -37,14 +37,18 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
-    }
-
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductDto>> getProductsByCategoryId(@RequestParam(required = false) Long categoryId)
+    {
+        if(categoryId != null)
+            return ResponseEntity.ok(productService.getProductsByCategoryId(categoryId));
+
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @PutMapping("/{id}")
@@ -60,7 +64,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String deleteProductById(@PathVariable Long id) {
         productService.deleteProductById(id);
-        return "Product with id: " + id + " has been deleted";
+        return "Product with id: " + id + " is deleted";
     }
 
     @GetMapping("/paged")
