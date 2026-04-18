@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.dto;
+package com.naveen.ecommerce_backend.dto.Product;
 
 import jakarta.validation.constraints.*;
 import lombok.*;

@@ -1,14 +1,15 @@
-package com.naveen.ecommerce_backend.dto;
+package com.naveen.ecommerce_backend.dto.User;
 
 import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CategoryDto {
+public class UserResponseDto {
 
     private Long id;
     private String name;
+    private String email;
 }

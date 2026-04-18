@@ -17,8 +17,6 @@ spring:
       hibernate:
         format_sql: true
 
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
   # home login credentials
   security:
     user:

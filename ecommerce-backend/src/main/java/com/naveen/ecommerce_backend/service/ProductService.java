@@ -1,9 +1,9 @@
 package com.naveen.ecommerce_backend.service;
 
-import com.naveen.ecommerce_backend.dto.CreateProductRequest;
-import com.naveen.ecommerce_backend.dto.ProductDto;
-import com.naveen.ecommerce_backend.dto.ProductMapper;
-import com.naveen.ecommerce_backend.dto.UpdateProductRequest;
+import com.naveen.ecommerce_backend.dto.Product.CreateProductRequest;
+import com.naveen.ecommerce_backend.dto.Product.ProductDto;
+import com.naveen.ecommerce_backend.dto.Product.ProductMapper;
+import com.naveen.ecommerce_backend.dto.Product.UpdateProductRequest;
 import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
 import com.naveen.ecommerce_backend.model.Category;
 import com.naveen.ecommerce_backend.model.Product;

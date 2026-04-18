@@ -1,13 +1,12 @@
 package com.naveen.ecommerce_backend.controller;
 
-import com.naveen.ecommerce_backend.dto.CreateProductRequest;
-import com.naveen.ecommerce_backend.dto.ProductDto;
-import com.naveen.ecommerce_backend.dto.UpdateProductRequest;
+import com.naveen.ecommerce_backend.dto.Product.CreateProductRequest;
+import com.naveen.ecommerce_backend.dto.Product.ProductDto;
+import com.naveen.ecommerce_backend.dto.Product.UpdateProductRequest;
 import com.naveen.ecommerce_backend.model.Product;
 import com.naveen.ecommerce_backend.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,21 +24,12 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductDto> createProduct(@ModelAttribute @Valid CreateProductRequest productRequest,
-                                                    @RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<ProductDto> createProduct(@ModelAttribute @Valid CreateProductRequest productRequest) throws IOException {
 
         ProductDto savedProduct = productService.createProduct(productRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
-    }
-
-    @GetMapping("/{id}")
-    public ProductDto getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
     }
 
     @GetMapping

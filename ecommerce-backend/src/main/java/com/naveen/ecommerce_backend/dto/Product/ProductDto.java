@@ -1,11 +1,9 @@
-package com.naveen.ecommerce_backend.dto;
+package com.naveen.ecommerce_backend.dto.Product;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.*;
+import com.naveen.ecommerce_backend.dto.Category.CategoryDto;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
