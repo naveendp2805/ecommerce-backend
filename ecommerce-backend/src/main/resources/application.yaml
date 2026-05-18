@@ -10,20 +10,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
     show-sql: true
-
     properties:
       hibernate:
         format_sql: true
 
-  # home login credentials
-  security:
-    user:
-      name: admin
-      password: admin
-
-  # file upload
   servlet:
     multipart:
       enabled: true
@@ -32,3 +23,7 @@ spring:
 
 file:
   upload-dir: uploads
+
+jwt:
+  secret: bXlTdXBlclNlY3JldEtleUZvckp3dEF1dGhlbnRpY2F0aW9uMTIzNDU2
+  expiration: 3600000

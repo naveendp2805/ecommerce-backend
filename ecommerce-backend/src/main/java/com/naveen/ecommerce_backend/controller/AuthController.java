@@ -1,5 +1,6 @@
 package com.naveen.ecommerce_backend.controller;
 
+import com.naveen.ecommerce_backend.dto.User.AuthResponse;
 import com.naveen.ecommerce_backend.dto.User.LoginRequest;
 import com.naveen.ecommerce_backend.dto.User.RegisterRequest;
 import com.naveen.ecommerce_backend.service.AuthService;
@@ -20,7 +21,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
