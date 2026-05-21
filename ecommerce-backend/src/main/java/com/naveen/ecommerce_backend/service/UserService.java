@@ -1,9 +1,9 @@
 package com.naveen.ecommerce_backend.service;
 
-import com.naveen.ecommerce_backend.dto.User.LoginRequest;
-import com.naveen.ecommerce_backend.dto.User.RegisterRequest;
-import com.naveen.ecommerce_backend.dto.User.UserMapper;
-import com.naveen.ecommerce_backend.dto.User.UserResponseDto;
+import com.naveen.ecommerce_backend.dto.user.LoginRequest;
+import com.naveen.ecommerce_backend.dto.user.RegisterRequest;
+import com.naveen.ecommerce_backend.dto.user.UserMapper;
+import com.naveen.ecommerce_backend.dto.user.UserResponseDto;
 import com.naveen.ecommerce_backend.model.User;
 import com.naveen.ecommerce_backend.repository.UserRepo;
 import lombok.RequiredArgsConstructor;

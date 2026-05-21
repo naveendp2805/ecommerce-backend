@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.dto.User;
+package com.naveen.ecommerce_backend.dto.user;
 
 import lombok.*;
 
@@ -7,8 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginRequest {
+public class RegisterRequest {
 
+    private String name;
     private String email;
     private String password;
 }

@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.dto.User;
+package com.naveen.ecommerce_backend.dto.user;
 
 import com.naveen.ecommerce_backend.model.User;
 

@@ -1,6 +1,6 @@
 package com.naveen.ecommerce_backend.controller;
 
-import com.naveen.ecommerce_backend.dto.Category.CategoryDto;
+import com.naveen.ecommerce_backend.dto.category.CategoryDto;
 import com.naveen.ecommerce_backend.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

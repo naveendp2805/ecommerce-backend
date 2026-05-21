@@ -1,6 +1,6 @@
-package com.naveen.ecommerce_backend.dto.Product;
+package com.naveen.ecommerce_backend.dto.product;
 
-import com.naveen.ecommerce_backend.dto.Category.CategoryDto;
+import com.naveen.ecommerce_backend.dto.category.CategoryDto;
 import lombok.*;
 
 import java.math.BigDecimal;

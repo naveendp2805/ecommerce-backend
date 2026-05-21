@@ -70,6 +70,8 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/products/**").hasRole("ADMIN")
 
+                        .requestMatchers("/api/cart/**").hasAnyRole("USER", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
 

@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.dto.Category;
+package com.naveen.ecommerce_backend.dto.category;
 
 import com.naveen.ecommerce_backend.model.Category;
 

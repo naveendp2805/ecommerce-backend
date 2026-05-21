@@ -1,8 +1,8 @@
 package com.naveen.ecommerce_backend.controller;
 
-import com.naveen.ecommerce_backend.dto.User.LoginRequest;
-import com.naveen.ecommerce_backend.dto.User.RegisterRequest;
-import com.naveen.ecommerce_backend.dto.User.UserResponseDto;
+import com.naveen.ecommerce_backend.dto.user.LoginRequest;
+import com.naveen.ecommerce_backend.dto.user.RegisterRequest;
+import com.naveen.ecommerce_backend.dto.user.UserResponseDto;
 import com.naveen.ecommerce_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
