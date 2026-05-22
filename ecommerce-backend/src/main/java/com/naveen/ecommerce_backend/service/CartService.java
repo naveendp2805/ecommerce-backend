@@ -4,13 +4,12 @@ import com.naveen.ecommerce_backend.dto.cart.CartItemResponse;
 import com.naveen.ecommerce_backend.dto.cart.CartRequest;
 import com.naveen.ecommerce_backend.dto.cart.CartResponse;
 import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
-import com.naveen.ecommerce_backend.model.Cart;
-import com.naveen.ecommerce_backend.model.CartItem;
-import com.naveen.ecommerce_backend.model.Product;
-import com.naveen.ecommerce_backend.model.User;
+import com.naveen.ecommerce_backend.model.Cart.Cart;
+import com.naveen.ecommerce_backend.model.Cart.CartItem;
+import com.naveen.ecommerce_backend.model.Product.Product;
+import com.naveen.ecommerce_backend.model.User.User;
 import com.naveen.ecommerce_backend.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 

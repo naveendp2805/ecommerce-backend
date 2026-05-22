@@ -1,7 +1,7 @@
 package com.naveen.ecommerce_backend.dto.product;
 
 import com.naveen.ecommerce_backend.dto.category.CategoryMapper;
-import com.naveen.ecommerce_backend.model.Product;
+import com.naveen.ecommerce_backend.model.Product.Product;
 
 public class ProductMapper {
 

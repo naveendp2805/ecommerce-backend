@@ -18,7 +18,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {
 
         ApiError error = new ApiError(e.getMessage());
+        return ResponseEntity.status(404).body(error);
+    }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> handleBadRequestException(BadRequestException e) {
+
+        ApiError error = new ApiError(e.getMessage());
         return ResponseEntity.status(404).body(error);
     }
 
@@ -26,7 +32,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
 
         Map<String, String> errors = new HashMap<>();
-
         e.getBindingResult().getFieldErrors()
                             .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
@@ -37,7 +42,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleGenericException(Exception e) {
 
         ApiError error = new ApiError(e.getMessage());
-
         return ResponseEntity.status(404).body(error);
     }
 

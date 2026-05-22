@@ -1,9 +1,12 @@
-package com.naveen.ecommerce_backend.model;
+package com.naveen.ecommerce_backend.model.User;
 
+import com.naveen.ecommerce_backend.model.Order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -31,5 +34,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
 }

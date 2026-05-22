@@ -2,7 +2,7 @@ package com.naveen.ecommerce_backend.service;
 
 import com.naveen.ecommerce_backend.dto.category.CategoryDto;
 import com.naveen.ecommerce_backend.dto.category.CategoryMapper;
-import com.naveen.ecommerce_backend.model.Category;
+import com.naveen.ecommerce_backend.model.Product.Category;
 import com.naveen.ecommerce_backend.repository.CategoryRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

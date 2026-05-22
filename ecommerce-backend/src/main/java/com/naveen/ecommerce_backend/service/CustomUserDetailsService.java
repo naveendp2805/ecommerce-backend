@@ -1,6 +1,6 @@
 package com.naveen.ecommerce_backend.service;
 
-import com.naveen.ecommerce_backend.model.User;
+import com.naveen.ecommerce_backend.model.User.User;
 import com.naveen.ecommerce_backend.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
