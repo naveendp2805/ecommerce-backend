@@ -44,6 +44,9 @@ public class Product {
     @Column(nullable = false)
     private Integer stockQuantity;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @Size(max = 500, message = "Image URL is too long.")
     @Column(nullable = false)
     private String imageUrl;

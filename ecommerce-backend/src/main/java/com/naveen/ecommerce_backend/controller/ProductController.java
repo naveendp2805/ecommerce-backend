@@ -33,6 +33,18 @@ public class ProductController {
     }
 
     @GetMapping
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
+
+        return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @GetMapping("/category")
     public ResponseEntity<List<ProductDto>> getProductsByCategoryId(@RequestParam(required = false) Long categoryId)
     {
         if(categoryId != null)

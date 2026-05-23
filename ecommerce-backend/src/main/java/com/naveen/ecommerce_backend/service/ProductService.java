@@ -48,8 +48,7 @@ public class ProductService {
 
         String fileName = System.currentTimeMillis() + "_" + imageFileName;
 
-        Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
-        Files.createDirectories(uploadPath);
+        Path uploadPath = getUploadPath();
 
         Path filePath = uploadPath.resolve(fileName);
 
@@ -63,6 +62,7 @@ public class ProductService {
                 .description(productRequest.getDescription())
                 .price(productRequest.getPrice())
                 .stockQuantity(productRequest.getStockQuantity())
+                .active(true)
                 .imageUrl("/" + uploadDir + "/" + fileName)
                 .category(category)
                 .build();
@@ -74,7 +74,7 @@ public class ProductService {
 
     public List<ProductDto> getAllProducts() {
 
-        return productRepo.findAll()
+        return productRepo.findByActiveTrue()
                 .stream()
                 .map(ProductMapper::toDto)
                 .collect(Collectors.toList());
@@ -89,16 +89,14 @@ public class ProductService {
 
     public List<ProductDto> getProductsByCategoryId(Long categoryId) {
 
-        return productRepo.findProductByCategoryId(categoryId)
+        return productRepo.findProductByCategoryIdAndActiveTrue(categoryId)
                 .stream()
                 .map(ProductMapper::toDto)
                 .toList();
 
     }
 
-    public ProductDto updateProductById(Long id,
-                                     UpdateProductRequest productRequest,
-                                     MultipartFile image) throws IOException
+    public ProductDto updateProductById(Long id, UpdateProductRequest productRequest, MultipartFile image) throws IOException
     {
 
         Product existingProduct = productRepo.findById(id)
@@ -111,8 +109,7 @@ public class ProductService {
 
         if(image != null && !image.isEmpty())
         {
-            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-            Files.createDirectories(uploadPath);
+            Path uploadPath = getUploadPath();
 
             if(existingProduct.getImageUrl() != null)
             {
@@ -141,25 +138,39 @@ public class ProductService {
 
         if(existingProduct.getImageUrl() != null)
         {
-            String imagePath = System.getProperty("user.dir") + existingProduct.getImageUrl();
-
-            Path filePath = Paths.get(imagePath);
-
             try{
+                Path uploadPath = getUploadPath();
+
+                String fileName = existingProduct.getImageUrl().replace(IMAGE_URL_PREFIX, "");
+
+                Path filePath = uploadPath.resolve(fileName);
+
                 Files.deleteIfExists(filePath);
+
             } catch(IOException e) {
-                throw new RuntimeException("Failed to delete image file", e);
+                throw new RuntimeException("Failed to delete image file ", e);
             }
         }
 
-        productRepo.delete(existingProduct);
+        existingProduct.setActive(false);
+
+        productRepo.save(existingProduct);
+
     }
 
     public Page<Product> getProductsByPage(int page, int size, String sortBy) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
-        return productRepo.findAll(pageable);
+        return productRepo.findByActiveTrue(pageable);
     }
 
+    public Path getUploadPath() throws IOException {
+
+        Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
+
+        Files.createDirectories(uploadPath);
+
+        return uploadPath;
+    }
 }
