@@ -3,12 +3,10 @@ package com.naveen.ecommerce_backend.controller;
 import com.naveen.ecommerce_backend.dto.Order.OrderResponse;
 import com.naveen.ecommerce_backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,8 +24,11 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> getMyOrders(Authentication authentication) {
+    public ResponseEntity<Page<OrderResponse>> getMyOrders(Authentication authentication,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "5") int size,
+                                                           @RequestParam(defaultValue = "orderDate") String sortBy) {
 
-        return ResponseEntity.ok(orderService.getMyOrders(authentication));
+        return ResponseEntity.ok(orderService.getMyOrders(authentication, page, size, sortBy));
     }
 }

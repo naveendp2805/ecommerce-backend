@@ -14,6 +14,10 @@ import com.naveen.ecommerce_backend.model.User.User;
 import com.naveen.ecommerce_backend.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -108,45 +112,39 @@ public class OrderService {
                 .build();
     }
 
-    public List<OrderResponse> getMyOrders(Authentication authentication) {
+    public Page<OrderResponse> getMyOrders(Authentication authentication, int page, int size, String sortBy) {
 
         String email = authentication.getName();
 
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found!!"));
 
-        List<Order> orders = orderRepo.findByUser(user);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
 
-        List<OrderResponse> orderResponses = new ArrayList<>();
+        Page<Order> orders = orderRepo.findByUser(user, pageable);
 
-        for(Order order : orders)
-        {
-            List<OrderItemResponse> orderItemResponses = new ArrayList<>();
-            for(OrderItem orderItem : order.getOrderItems())
-            {
-                OrderItemResponse orderItemResponse = OrderItemResponse.builder()
-                        .productId(orderItem.getProduct().getId())
-                        .productName(orderItem.getProduct().getName())
-                        .price(orderItem.getPriceAtPurchase())
-                        .quantity(orderItem.getQuantity())
-                        .subTotal(orderItem.getSubTotal())
-                        .build();
+        return orders.map(order -> {
 
-                orderItemResponses.add(orderItemResponse);
-            }
+            List<OrderItemResponse> orderItemResponses = order.getOrderItems()
+                    .stream()
+                    .map(orderItem ->
+                            OrderItemResponse.builder()
+                                    .productId(orderItem.getProduct().getId())
+                                    .productName(orderItem.getProduct().getName())
+                                    .quantity(orderItem.getQuantity())
+                                    .price(orderItem.getPriceAtPurchase())
+                                    .subTotal(orderItem.getSubTotal())
+                                    .build())
+                    .toList();
 
-            OrderResponse orderResponse = OrderResponse.builder()
+            return OrderResponse.builder()
                     .orderId(order.getId())
                     .orderDate(order.getOrderDate())
                     .orderStatus(order.getOrderStatus())
-                    .totalAmount(order.getTotalAmount())
                     .items(orderItemResponses)
+                    .totalAmount(order.getTotalAmount())
                     .build();
-
-            orderResponses.add(orderResponse);
-        }
-
-        return orderResponses;
+        });
     }
 
 }
