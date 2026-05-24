@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.model.Order;
+package com.naveen.ecommerce_backend.model.order;
 
 public enum OrderStatus {
 

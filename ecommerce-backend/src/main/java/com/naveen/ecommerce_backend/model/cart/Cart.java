@@ -1,6 +1,6 @@
-package com.naveen.ecommerce_backend.model.Cart;
+package com.naveen.ecommerce_backend.model.cart;
 
-import com.naveen.ecommerce_backend.model.User.User;
+import com.naveen.ecommerce_backend.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

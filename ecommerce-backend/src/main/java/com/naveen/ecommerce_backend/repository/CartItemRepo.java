@@ -1,8 +1,8 @@
 package com.naveen.ecommerce_backend.repository;
 
-import com.naveen.ecommerce_backend.model.Cart.Cart;
-import com.naveen.ecommerce_backend.model.Cart.CartItem;
-import com.naveen.ecommerce_backend.model.Product.Product;
+import com.naveen.ecommerce_backend.model.cart.Cart;
+import com.naveen.ecommerce_backend.model.cart.CartItem;
+import com.naveen.ecommerce_backend.model.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

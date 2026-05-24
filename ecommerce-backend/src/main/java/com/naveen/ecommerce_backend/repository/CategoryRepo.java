@@ -1,6 +1,6 @@
 package com.naveen.ecommerce_backend.repository;
 
-import com.naveen.ecommerce_backend.model.Product.Category;
+import com.naveen.ecommerce_backend.model.product.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

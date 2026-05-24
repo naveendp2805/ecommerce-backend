@@ -1,6 +1,6 @@
 package com.naveen.ecommerce_backend.dto.Order;
 
-import com.naveen.ecommerce_backend.model.Order.OrderStatus;
+import com.naveen.ecommerce_backend.model.order.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

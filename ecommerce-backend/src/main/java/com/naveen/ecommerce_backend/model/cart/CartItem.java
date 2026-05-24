@@ -1,6 +1,6 @@
-package com.naveen.ecommerce_backend.model.Cart;
+package com.naveen.ecommerce_backend.model.cart;
 
-import com.naveen.ecommerce_backend.model.Product.Product;
+import com.naveen.ecommerce_backend.model.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

@@ -4,7 +4,7 @@ import com.naveen.ecommerce_backend.dto.user.LoginRequest;
 import com.naveen.ecommerce_backend.dto.user.RegisterRequest;
 import com.naveen.ecommerce_backend.dto.user.UserMapper;
 import com.naveen.ecommerce_backend.dto.user.UserResponseDto;
-import com.naveen.ecommerce_backend.model.User.User;
+import com.naveen.ecommerce_backend.model.user.User;
 import com.naveen.ecommerce_backend.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

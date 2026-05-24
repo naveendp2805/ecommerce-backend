@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.model.Product;
+package com.naveen.ecommerce_backend.model.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.model.Product;
+package com.naveen.ecommerce_backend.model.product;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

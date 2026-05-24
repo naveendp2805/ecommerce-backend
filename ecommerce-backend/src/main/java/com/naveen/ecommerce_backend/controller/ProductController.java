@@ -3,7 +3,7 @@ package com.naveen.ecommerce_backend.controller;
 import com.naveen.ecommerce_backend.dto.product.CreateProductRequest;
 import com.naveen.ecommerce_backend.dto.product.ProductDto;
 import com.naveen.ecommerce_backend.dto.product.UpdateProductRequest;
-import com.naveen.ecommerce_backend.model.Product.Product;
+import com.naveen.ecommerce_backend.model.product.Product;
 import com.naveen.ecommerce_backend.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

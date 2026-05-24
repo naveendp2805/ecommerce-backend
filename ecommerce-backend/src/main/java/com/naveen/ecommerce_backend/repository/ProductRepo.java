@@ -1,6 +1,6 @@
 package com.naveen.ecommerce_backend.repository;
 
-import com.naveen.ecommerce_backend.model.Product.Product;
+import com.naveen.ecommerce_backend.model.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

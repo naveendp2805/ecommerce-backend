@@ -26,4 +26,5 @@ file:
 
 jwt:
   secret: bXlTdXBlclNlY3JldEtleUZvckp3dEF1dGhlbnRpY2F0aW9uMTIzNDU2
-  expiration: 3600000
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000

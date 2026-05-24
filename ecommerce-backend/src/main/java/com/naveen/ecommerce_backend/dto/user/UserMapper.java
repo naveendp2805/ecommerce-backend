@@ -1,6 +1,6 @@
 package com.naveen.ecommerce_backend.dto.user;
 
-import com.naveen.ecommerce_backend.model.User.User;
+import com.naveen.ecommerce_backend.model.user.User;
 
 public class UserMapper {
 

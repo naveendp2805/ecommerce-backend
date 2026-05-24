@@ -1,6 +1,6 @@
-package com.naveen.ecommerce_backend.model.User;
+package com.naveen.ecommerce_backend.model.user;
 
-import com.naveen.ecommerce_backend.model.Order.Order;
+import com.naveen.ecommerce_backend.model.order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

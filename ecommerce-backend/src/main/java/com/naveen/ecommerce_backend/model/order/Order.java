@@ -1,6 +1,6 @@
-package com.naveen.ecommerce_backend.model.Order;
+package com.naveen.ecommerce_backend.model.order;
 
-import com.naveen.ecommerce_backend.model.User.User;
+import com.naveen.ecommerce_backend.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
