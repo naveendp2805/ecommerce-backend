@@ -1,15 +1,11 @@
 package com.naveen.ecommerce_backend.controller;
 
-import com.naveen.ecommerce_backend.dto.user.AuthResponse;
-import com.naveen.ecommerce_backend.dto.user.LoginRequest;
-import com.naveen.ecommerce_backend.dto.user.RefreshTokenRequest;
-import com.naveen.ecommerce_backend.dto.user.RegisterRequest;
+import com.naveen.ecommerce_backend.dto.user.*;
 import com.naveen.ecommerce_backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,8 +30,12 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(Principal principal) {
+    public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
+        return ResponseEntity.ok(authService.logout(request));
+    }
 
-        return ResponseEntity.ok(authService.logout(principal));
+    @PostMapping("/logout-all")
+    public ResponseEntity<String> logoutAllDevices(Authentication authentication) {
+        return ResponseEntity.ok(authService.logoutAllDevices(authentication));
     }
 }

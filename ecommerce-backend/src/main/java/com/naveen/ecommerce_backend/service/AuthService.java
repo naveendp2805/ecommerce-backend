@@ -1,9 +1,6 @@
 package com.naveen.ecommerce_backend.service;
 
-import com.naveen.ecommerce_backend.dto.user.AuthResponse;
-import com.naveen.ecommerce_backend.dto.user.LoginRequest;
-import com.naveen.ecommerce_backend.dto.user.RefreshTokenRequest;
-import com.naveen.ecommerce_backend.dto.user.RegisterRequest;
+import com.naveen.ecommerce_backend.dto.user.*;
 import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
 import com.naveen.ecommerce_backend.model.user.Role;
 import com.naveen.ecommerce_backend.model.user.User;
@@ -15,12 +12,11 @@ import com.naveen.ecommerce_backend.security.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
@@ -90,13 +86,23 @@ public class AuthService {
         return new AuthResponse(newAccessToken, newRefreshToken);
     }
 
-    public String logout(Principal principal) {
+    public String logout(LogoutRequest request) {
 
-        User user = userRepo.findByEmail(principal.getName())
+        RefreshToken refreshToken = refreshTokenRepo.findByToken(request.getRefreshToken())
+                .orElseThrow(() -> new ResourceNotFoundException("Refresh Token not found!!"));
+
+        refreshTokenRepo.delete(refreshToken);
+
+        return "Logged out successfully!";
+    }
+
+    public String logoutAllDevices(Authentication authentication) {
+
+        User user = userRepo.findByEmail(authentication.getName())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found!!"));
 
         refreshTokenRepo.deleteByUser(user);
 
-        return "Logged out successfully!";
+        return "Logged out from all devices successfully";
     }
 }

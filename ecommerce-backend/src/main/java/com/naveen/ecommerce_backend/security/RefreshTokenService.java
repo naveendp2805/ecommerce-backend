@@ -21,12 +21,11 @@ public class RefreshTokenService {
 
     public RefreshToken createRefreshToken(User user) {
 
-        RefreshToken refreshToken = refreshTokenRepo.findByUser(user)
-                .orElse(new RefreshToken());
+        RefreshToken refreshToken = new RefreshToken();
 
         refreshToken.setUser(user);
-        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDuration));
         refreshToken.setToken(UUID.randomUUID().toString());
+        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDuration));
 
         return refreshTokenRepo.save(refreshToken);
     }

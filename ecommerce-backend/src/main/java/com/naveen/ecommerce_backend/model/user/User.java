@@ -1,11 +1,13 @@
 package com.naveen.ecommerce_backend.model.user;
 
 import com.naveen.ecommerce_backend.model.order.Order;
+import com.naveen.ecommerce_backend.security.RefreshToken;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,5 +39,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RefreshToken> refreshTokens = new ArrayList<>();
 
 }
