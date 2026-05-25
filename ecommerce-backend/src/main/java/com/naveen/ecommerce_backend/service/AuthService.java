@@ -9,6 +9,7 @@ import com.naveen.ecommerce_backend.repository.UserRepo;
 import com.naveen.ecommerce_backend.security.JwtService;
 import com.naveen.ecommerce_backend.security.RefreshToken;
 import com.naveen.ecommerce_backend.security.RefreshTokenService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -67,6 +68,7 @@ public class AuthService {
         return new AuthResponse(accessToken, refreshToken);
     }
 
+    @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
 
         String requestToken = request.getRefreshToken();

@@ -2,6 +2,7 @@ package com.naveen.ecommerce_backend.controller;
 
 import com.naveen.ecommerce_backend.dto.payment.PaymentRequest;
 import com.naveen.ecommerce_backend.dto.payment.PaymentResponse;
+import com.naveen.ecommerce_backend.dto.payment.VerifyPaymentRequest;
 import com.naveen.ecommerce_backend.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,11 @@ public class PaymentController {
 
     @PostMapping("/create-order")
     public ResponseEntity<PaymentResponse> createPaymentOrder(@RequestBody PaymentRequest request) throws Exception{
-
         return ResponseEntity.ok(paymentService.createPaymentOrder(request));
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<String> verifyPaymentOrder(@RequestBody VerifyPaymentRequest request) throws Exception {
+        return ResponseEntity.ok(paymentService.verifyPaymentOrder(request));
     }
 }
