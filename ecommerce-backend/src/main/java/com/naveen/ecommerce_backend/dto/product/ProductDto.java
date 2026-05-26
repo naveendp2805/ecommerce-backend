@@ -3,6 +3,7 @@ package com.naveen.ecommerce_backend.dto.product;
 import com.naveen.ecommerce_backend.dto.category.CategoryDto;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductDto {
+public class ProductDto implements Serializable {
 
     private Long id;
     private String name;

@@ -1,5 +1,6 @@
 package com.naveen.ecommerce_backend.service;
 
+import com.naveen.ecommerce_backend.cache.CacheConstants;
 import com.naveen.ecommerce_backend.dto.product.CreateProductRequest;
 import com.naveen.ecommerce_backend.dto.product.ProductDto;
 import com.naveen.ecommerce_backend.dto.product.ProductMapper;
@@ -11,6 +12,9 @@ import com.naveen.ecommerce_backend.repository.CategoryRepo;
 import com.naveen.ecommerce_backend.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +41,7 @@ public class ProductService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
+    @CacheEvict(value = {CacheConstants.PRODUCTS}, allEntries = true)
     public ProductDto createProduct(CreateProductRequest productRequest) throws IOException
     {
         MultipartFile image = productRequest.getImage();
@@ -72,6 +77,7 @@ public class ProductService {
         return ProductMapper.toDto(saveProduct);
     }
 
+    @Cacheable(value = CacheConstants.PRODUCTS)
     public List<ProductDto> getAllProducts() {
 
         return productRepo.findByActiveTrue()
@@ -80,6 +86,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = CacheConstants.PRODUCT, key = "#id")
     public ProductDto getProductById(Long id) {
         Product product =  productRepo.findById(id)
                             .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
@@ -96,6 +103,10 @@ public class ProductService {
 
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.PRODUCTS, allEntries = true),
+            @CacheEvict(value = CacheConstants.PRODUCT, key = "#id")
+    })
     public ProductDto updateProductById(Long id, UpdateProductRequest productRequest, MultipartFile image) throws IOException
     {
 
@@ -131,6 +142,10 @@ public class ProductService {
         return ProductMapper.toDto(updatedProduct);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.PRODUCTS, allEntries = true),
+            @CacheEvict(value = CacheConstants.PRODUCT, key = "#id")
+    })
     public void deleteProductById(Long id) {
 
         Product existingProduct = productRepo.findById(id)

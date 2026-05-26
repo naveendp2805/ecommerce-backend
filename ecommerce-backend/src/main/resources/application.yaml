@@ -24,6 +24,14 @@ spring:
   config:
     import: optional:application-secret.yaml
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  cache:
+    type: redis
+
 file:
   upload-dir: uploads
 

@@ -1,10 +1,14 @@
 package com.naveen.ecommerce_backend.service;
 
+import com.naveen.ecommerce_backend.cache.CacheConstants;
 import com.naveen.ecommerce_backend.dto.category.CategoryDto;
 import com.naveen.ecommerce_backend.dto.category.CategoryMapper;
 import com.naveen.ecommerce_backend.model.product.Category;
 import com.naveen.ecommerce_backend.repository.CategoryRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +19,7 @@ public class CategoryService {
 
     private final CategoryRepo categoryRepo;
 
+    @CacheEvict(value = CacheConstants.CATEGORIES, allEntries = true)
     public CategoryDto createCategory(CategoryDto dto) {
 
         if(categoryRepo.findByName(dto.getName()).isPresent())
@@ -27,6 +32,10 @@ public class CategoryService {
         return CategoryMapper.toDto(saved);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.CATEGORIES, allEntries = true),
+            @CacheEvict(value = CacheConstants.CATEGORY, key = "#id")
+    })
     public CategoryDto updateCategoryById(Long id, CategoryDto dto)
     {
         Category category = categoryRepo.findById(id)
@@ -37,6 +46,7 @@ public class CategoryService {
         return CategoryMapper.toDto(categoryRepo.save(category));
     }
 
+    @Cacheable(value = CacheConstants.CATEGORIES)
     public List<CategoryDto> getAllCategories() {
 
         return categoryRepo.findAll()
@@ -45,6 +55,7 @@ public class CategoryService {
                 .toList();
     }
 
+    @Cacheable(value = CacheConstants.CATEGORY, key = "#id")
     public CategoryDto getCategoryById(Long id) {
 
         Category category = categoryRepo.findById(id)
@@ -53,6 +64,10 @@ public class CategoryService {
         return CategoryMapper.toDto(category);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.CATEGORIES, allEntries = true),
+            @CacheEvict(value = CacheConstants.CATEGORY, key = "#id")
+    })
     public void deleteCategoryById(Long id) {
 
         Category category = categoryRepo.findById(id)
