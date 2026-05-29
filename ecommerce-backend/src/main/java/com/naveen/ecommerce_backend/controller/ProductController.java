@@ -1,5 +1,6 @@
 package com.naveen.ecommerce_backend.controller;
 
+import com.naveen.ecommerce_backend.dto.PageResponse;
 import com.naveen.ecommerce_backend.dto.product.CreateProductRequest;
 import com.naveen.ecommerce_backend.dto.product.ProductDto;
 import com.naveen.ecommerce_backend.dto.product.UpdateProductRequest;
@@ -70,11 +71,11 @@ public class ProductController {
     }
 
     @GetMapping("/paged")
-    public Page<Product> getProductsByPage(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id") String sortBy) {
+    public ResponseEntity<PageResponse<ProductDto>> getProductsByPage(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "5") int size,
+                                                          @RequestParam(defaultValue = "id") String sortBy,
+                                                          @RequestParam(defaultValue = "asc") String direction) {
 
-        return productService.getProductsByPage(page, size, sortBy);
+        return ResponseEntity.ok(productService.getProductsByPage(page, size, sortBy, direction));
     }
 }

@@ -1,6 +1,7 @@
 package com.naveen.ecommerce_backend.service;
 
 import com.naveen.ecommerce_backend.cache.CacheConstants;
+import com.naveen.ecommerce_backend.dto.PageResponse;
 import com.naveen.ecommerce_backend.dto.product.CreateProductRequest;
 import com.naveen.ecommerce_backend.dto.product.ProductDto;
 import com.naveen.ecommerce_backend.dto.product.ProductMapper;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -173,19 +175,33 @@ public class ProductService {
 
     }
 
-    public Page<Product> getProductsByPage(int page, int size, String sortBy) {
+    public PageResponse<ProductDto> getProductsByPage(int page, int size, String sortBy, String direction) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return productRepo.findByActiveTrue(pageable);
+        Page<Product> productPage = productRepo.findByActiveTrue(pageable);
+
+        List<ProductDto> content = productPage
+                .getContent()
+                .stream()
+                .map(ProductMapper::toDto)
+                .toList();
+
+        return PageResponse.<ProductDto>builder()
+                .content(content)
+                .pageNumber(productPage.getNumber())
+                .pageSize(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
+                .lastPage(productPage.isLast())
+                .build();
     }
 
     public Path getUploadPath() throws IOException {
 
         Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
-
         Files.createDirectories(uploadPath);
-
         return uploadPath;
     }
 }
