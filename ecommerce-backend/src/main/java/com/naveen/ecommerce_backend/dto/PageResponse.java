@@ -2,6 +2,7 @@ package com.naveen.ecommerce_backend.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -9,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PageResponse<T> {
+public class PageResponse<T> implements Serializable {
 
     private List<T> content;
     private int pageNumber;

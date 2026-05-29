@@ -175,6 +175,7 @@ public class ProductService {
 
     }
 
+    @Cacheable(value = CacheConstants.PRODUCTS, key = "'page:' + #page + ':size:' + #size + ':sort:' + #sortBy + ':dir:' + #direction")
     public PageResponse<ProductDto> getProductsByPage(int page, int size, String sortBy, String direction) {
 
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
