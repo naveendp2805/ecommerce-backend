@@ -33,6 +33,9 @@ services:
     ports:
       - "8080:8080"
 
+    volumes:
+      - ../uploads:/app/uploads
+
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce
       SPRING_DATASOURCE_USERNAME: postgres

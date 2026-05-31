@@ -4,11 +4,9 @@ import com.naveen.ecommerce_backend.dto.PageResponse;
 import com.naveen.ecommerce_backend.dto.product.CreateProductRequest;
 import com.naveen.ecommerce_backend.dto.product.ProductDto;
 import com.naveen.ecommerce_backend.dto.product.UpdateProductRequest;
-import com.naveen.ecommerce_backend.model.product.Product;
 import com.naveen.ecommerce_backend.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProductController {
 
     private final ProductService productService;
