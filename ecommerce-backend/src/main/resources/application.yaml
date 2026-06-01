@@ -1,45 +1,45 @@
-spring:
-  application:
-    name: ecommerce-backend
+  spring:
+    application:
+      name: ecommerce-backend
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: 12345678
+    datasource:
+      url: ${datasource.url}
+      username: ${datasource.username}
+      password: ${datasource.password}
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
+    jpa:
       hibernate:
-        format_sql: true
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
 
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 10MB
-      max-request-size: 10MB
+    servlet:
+      multipart:
+        enabled: true
+        max-file-size: 10MB
+        max-request-size: 10MB
 
-  config:
-    import: optional:application-secret.yaml
+    config:
+      import: optional:application-secret.yaml
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
+    data:
+      redis:
+        host: localhost
+        port: 6379
 
-  cache:
-    type: redis
+    cache:
+      type: redis
 
-file:
-  upload-dir: uploads
+  file:
+    upload-dir: uploads
 
-jwt:
-  secret: bXlTdXBlclNlY3JldEtleUZvckp3dEF1dGhlbnRpY2F0aW9uMTIzNDU2
-  access-token-expiration: 900000
-  refresh-token-expiration: 604800000
+  jwt:
+    secret: ${jwt.secret}
+    access-token-expiration: ${jwt.access-token-expiration}
+    refresh-token-expiration: ${jwt.refresh-token-expiration}
 
-razorpay:
-  key: ${RAZORPAY_KEY_ID}
-  secret: ${RAZORPAY_KEY_SECRET}
+  razorpay:
+    key: ${razorpay.key}
+    secret: ${razorpay.secret}

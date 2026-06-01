@@ -101,6 +101,7 @@ public class CartService {
             totalAmount = totalAmount.add(subtotal);
 
             CartItemResponse cartItemResponse = CartItemResponse.builder()
+                    .cartItemId(cartItem.getId())
                     .productId(cartItem.getProduct().getId())
                     .productName(cartItem.getProduct().getName())
                     .price(cartItem.getProduct().getPrice())
