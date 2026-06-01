@@ -29,6 +29,9 @@ spring:
   cache:
     type: redis
 
+server:
+  port: ${PORT:8080}
+
 file:
   upload-dir: uploads
 
