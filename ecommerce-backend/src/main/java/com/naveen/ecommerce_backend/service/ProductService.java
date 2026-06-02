@@ -2,17 +2,13 @@ package com.naveen.ecommerce_backend.service;
 
 import com.naveen.ecommerce_backend.cache.CacheConstants;
 import com.naveen.ecommerce_backend.dto.PageResponse;
-import com.naveen.ecommerce_backend.dto.product.CreateProductRequest;
-import com.naveen.ecommerce_backend.dto.product.ProductDto;
-import com.naveen.ecommerce_backend.dto.product.ProductMapper;
-import com.naveen.ecommerce_backend.dto.product.UpdateProductRequest;
+import com.naveen.ecommerce_backend.dto.product.*;
 import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
 import com.naveen.ecommerce_backend.model.product.Category;
 import com.naveen.ecommerce_backend.model.product.Product;
 import com.naveen.ecommerce_backend.repository.CategoryRepo;
 import com.naveen.ecommerce_backend.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -24,10 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,29 +29,20 @@ public class ProductService {
 
     private final ProductRepo productRepo;
 
-    private static final String IMAGE_URL_PREFIX = "/uploads/";
     private final CategoryRepo categoryRepo;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    private final CloudinaryService cloudinaryService;
 
     @CacheEvict(value = {CacheConstants.PRODUCTS}, allEntries = true)
     public ProductDto createProduct(CreateProductRequest productRequest) throws IOException
     {
         MultipartFile image = productRequest.getImage();
 
-        String imageFileName = image.getOriginalFilename();
-        if(imageFileName == null){
+        if(image == null || image.isEmpty()){
             throw new RuntimeException("Image is required");
         }
 
-        String fileName = System.currentTimeMillis() + "_" + imageFileName;
-
-        Path uploadPath = getUploadPath();
-
-        Path filePath = uploadPath.resolve(fileName);
-
-        image.transferTo(filePath);
+        CloudinaryResponse imageResponse = cloudinaryService.uploadImage(image);
 
         Category category = categoryRepo.findById(productRequest.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not Found!!"));
@@ -70,7 +53,8 @@ public class ProductService {
                 .price(productRequest.getPrice())
                 .stockQuantity(productRequest.getStockQuantity())
                 .active(true)
-                .imageUrl("/" + uploadDir + "/" + fileName)
+                .imageUrl(imageResponse.getImageUrl())
+                .imagePublicId(imageResponse.getPublicId())
                 .category(category)
                 .build();
 
@@ -122,21 +106,14 @@ public class ProductService {
 
         if(image != null && !image.isEmpty())
         {
-            Path uploadPath = getUploadPath();
-
-            if(existingProduct.getImageUrl() != null)
-            {
-                String oldFileName = existingProduct.getImageUrl().replace(IMAGE_URL_PREFIX, "");
-                Path oldFilePath = uploadPath.resolve(oldFileName);
-                Files.deleteIfExists(oldFilePath);
+            if(existingProduct.getImagePublicId() != null) {
+                cloudinaryService.deleteImage(existingProduct.getImagePublicId());
             }
 
-            String newFileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            Path newFilePath = uploadPath.resolve(newFileName);
+            CloudinaryResponse imageResponse = cloudinaryService.uploadImage(image);
 
-            image.transferTo(newFilePath.toFile());
-
-            existingProduct.setImageUrl("/uploads/" + newFileName);
+            existingProduct.setImageUrl(imageResponse.getImageUrl());
+            existingProduct.setImagePublicId(imageResponse.getPublicId());
         }
 
         Product updatedProduct = productRepo.save(existingProduct);
@@ -148,25 +125,13 @@ public class ProductService {
             @CacheEvict(value = CacheConstants.PRODUCTS, allEntries = true),
             @CacheEvict(value = CacheConstants.PRODUCT, key = "#id")
     })
-    public void deleteProductById(Long id) {
+    public void deleteProductById(Long id) throws IOException {
 
         Product existingProduct = productRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        if(existingProduct.getImageUrl() != null)
-        {
-            try{
-                Path uploadPath = getUploadPath();
-
-                String fileName = existingProduct.getImageUrl().replace(IMAGE_URL_PREFIX, "");
-
-                Path filePath = uploadPath.resolve(fileName);
-
-                Files.deleteIfExists(filePath);
-
-            } catch(IOException e) {
-                throw new RuntimeException("Failed to delete image file ", e);
-            }
+        if(existingProduct.getImagePublicId() != null) {
+            cloudinaryService.deleteImage(existingProduct.getImagePublicId());
         }
 
         existingProduct.setActive(false);
@@ -199,10 +164,4 @@ public class ProductService {
                 .build();
     }
 
-    public Path getUploadPath() throws IOException {
-
-        Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
-        Files.createDirectories(uploadPath);
-        return uploadPath;
-    }
 }

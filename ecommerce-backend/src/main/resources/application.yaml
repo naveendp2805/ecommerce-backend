@@ -26,8 +26,8 @@
 
     data:
       redis:
-        host: localhost
-        port: 6379
+        host: ${redis.HOST}
+        port: ${redis.PORT}
 
     cache:
       type: redis
@@ -43,3 +43,8 @@
   razorpay:
     key: ${razorpay.key}
     secret: ${razorpay.secret}
+
+  Cloudinary:
+    cloud-name: ${cloudinary.CLOUDINARY_CLOUD_NAME}
+    api-key: ${cloudinary.CLOUDINARY_API_KEY}
+    api-secret: ${cloudinary.CLOUDINARY_API_SECRET}
