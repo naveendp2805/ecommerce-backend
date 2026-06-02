@@ -1,4 +1,4 @@
-package com.naveen.ecommerce_backend.cache;
+package com.naveen.ecommerce_backend.constants;
 
 public class CacheConstants {
 

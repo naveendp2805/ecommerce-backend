@@ -1,6 +1,7 @@
 package com.naveen.ecommerce_backend.service;
 
-import com.naveen.ecommerce_backend.cache.CacheConstants;
+import com.naveen.ecommerce_backend.constants.CacheConstants;
+import com.naveen.ecommerce_backend.constants.CloudinaryFolders;
 import com.naveen.ecommerce_backend.dto.PageResponse;
 import com.naveen.ecommerce_backend.dto.product.*;
 import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
@@ -42,7 +43,7 @@ public class ProductService {
             throw new RuntimeException("Image is required");
         }
 
-        CloudinaryResponse imageResponse = cloudinaryService.uploadImage(image);
+        CloudinaryResponse imageResponse = cloudinaryService.uploadImage(image, CloudinaryFolders.PRODUCTS);
 
         Category category = categoryRepo.findById(productRequest.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not Found!!"));
@@ -110,7 +111,7 @@ public class ProductService {
                 cloudinaryService.deleteImage(existingProduct.getImagePublicId());
             }
 
-            CloudinaryResponse imageResponse = cloudinaryService.uploadImage(image);
+            CloudinaryResponse imageResponse = cloudinaryService.uploadImage(image, CloudinaryFolders.PRODUCTS);
 
             existingProduct.setImageUrl(imageResponse.getImageUrl());
             existingProduct.setImagePublicId(imageResponse.getPublicId());

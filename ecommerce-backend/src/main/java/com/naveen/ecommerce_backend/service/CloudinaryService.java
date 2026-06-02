@@ -16,11 +16,11 @@ public class CloudinaryService {
 
     private final Cloudinary cloudinary;
 
-    public CloudinaryResponse uploadImage(MultipartFile file) throws IOException {
+    public CloudinaryResponse uploadImage(MultipartFile file, String folder) throws IOException {
 
         Map<?, ?> uploadResult = cloudinary.uploader().upload(
                 file.getBytes(),
-                ObjectUtils.asMap("folder", "ecommerce/products")
+                ObjectUtils.asMap("folder", folder)
         );
 
         return new CloudinaryResponse(

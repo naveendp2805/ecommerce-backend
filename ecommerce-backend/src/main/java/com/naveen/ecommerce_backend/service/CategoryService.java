@@ -1,6 +1,6 @@
 package com.naveen.ecommerce_backend.service;
 
-import com.naveen.ecommerce_backend.cache.CacheConstants;
+import com.naveen.ecommerce_backend.constants.CacheConstants;
 import com.naveen.ecommerce_backend.dto.category.CategoryDto;
 import com.naveen.ecommerce_backend.dto.category.CategoryMapper;
 import com.naveen.ecommerce_backend.model.product.Category;
