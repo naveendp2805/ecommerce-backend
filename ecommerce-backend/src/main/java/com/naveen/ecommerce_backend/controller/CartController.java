@@ -18,25 +18,31 @@ public class CartController {
 
     @PostMapping("/add")
     public ResponseEntity<CartResponse> addItemToCart(@RequestBody CartRequest cartRequest, Authentication authentication) {
-
         return ResponseEntity.ok(cartService.addItemToCart(cartRequest, authentication));
     }
 
     @GetMapping
     public ResponseEntity<CartResponse> getCart(Authentication authentication) {
-
         return ResponseEntity.ok(cartService.getCart(authentication));
+    }
+
+    @PatchMapping("item/{cartItemId}/increase")
+    public ResponseEntity<String> increaseQuantity(@PathVariable Long cartItemId) {
+        return ResponseEntity.ok(cartService.increaseQuantity(cartItemId));
+    }
+
+    @PatchMapping("item/{cartItemId}/decrease")
+    public ResponseEntity<String> decreaseQuantity(@PathVariable Long cartItemId) {
+        return ResponseEntity.ok(cartService.decreaseQuantity(cartItemId));
     }
 
     @DeleteMapping("/item/{cartItemId}")
     public ResponseEntity<String> removeCartItem(@PathVariable Long cartItemId) {
-
         return ResponseEntity.ok(cartService.removeCartItem(cartItemId));
     }
 
     @DeleteMapping("/clear")
     public ResponseEntity<String> clearCart(Authentication authentication) {
-
         return ResponseEntity.ok(cartService.clearCart(authentication));
     }
 }

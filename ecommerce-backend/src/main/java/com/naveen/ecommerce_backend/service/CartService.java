@@ -120,6 +120,37 @@ public class CartService {
 
     }
 
+    public String increaseQuantity(Long cartItemId) {
+
+        CartItem cartItem = cartItemRepo.findById(cartItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart Item not found"));
+
+        if(cartItem.getQuantity() >= cartItem.getProduct().getStockQuantity())
+            throw new RuntimeException("Maximum Stock Quantity Reached");
+
+        cartItem.setQuantity(cartItem.getQuantity() + 1);
+
+        cartItemRepo.save(cartItem);
+
+        return "Quantity increased successfully";
+    }
+
+    public String decreaseQuantity(Long cartItemId) {
+
+        CartItem cartItem = cartItemRepo.findById(cartItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart Item not found"));
+
+        if(cartItem.getQuantity() > 1) {
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
+
+            cartItemRepo.save(cartItem);
+        } else {
+            cartItemRepo.delete(cartItem);
+        }
+
+        return "Quantity updated successfully";
+    }
+
     public String removeCartItem(Long cartItemId) {
 
         CartItem cartItem = cartItemRepo.findById(cartItemId)
