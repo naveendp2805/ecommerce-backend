@@ -23,7 +23,7 @@ public class UpdateProfileRequest {
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must contain exactly 10 digits")
     private String phoneNumber;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)

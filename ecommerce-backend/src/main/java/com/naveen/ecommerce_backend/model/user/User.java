@@ -48,7 +48,7 @@ public class User {
 
     private String profileImagePublicId;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
