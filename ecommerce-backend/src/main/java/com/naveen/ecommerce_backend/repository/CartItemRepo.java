@@ -16,5 +16,4 @@ public interface CartItemRepo extends JpaRepository<CartItem, Long> {
 
     CartItem cart(Cart cart);
 
-    CartItem cart(Cart cart);
 }
