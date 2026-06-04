@@ -66,7 +66,7 @@ public class AuthService {
 
         String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
 
-        return new AuthResponse(accessToken, refreshToken);
+        return new AuthResponse(accessToken, refreshToken, user.getId(), user.getEmail(), user.getRole());
     }
 
     @Transactional
@@ -86,7 +86,7 @@ public class AuthService {
 
         String newRefreshToken = refreshTokenService.createRefreshToken(user).getToken();
 
-        return new AuthResponse(newAccessToken, newRefreshToken);
+        return new AuthResponse(newAccessToken, newRefreshToken, user.getId(), user.getEmail(), user.getRole());
     }
 
     public String logout(LogoutRequest request) {
