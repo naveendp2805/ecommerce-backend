@@ -1,5 +1,6 @@
 package com.naveen.ecommerce_backend.controller;
 
+import com.naveen.ecommerce_backend.dto.user.AdminUserUpdateRequest;
 import com.naveen.ecommerce_backend.dto.user.LoginRequest;
 import com.naveen.ecommerce_backend.dto.user.RegisterRequest;
 import com.naveen.ecommerce_backend.dto.user.UserResponseDto;
@@ -31,6 +32,12 @@ public class UserController {
     public ResponseEntity<UserResponseDto> updateUserById(@PathVariable Long id,
                                                           @RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.updateUserById(id, registerRequest));
+    }
+
+    @PutMapping("/{id}/admin")
+    public ResponseEntity<UserResponseDto> updateUserByAdmin(@PathVariable Long id,
+                                                             @RequestBody AdminUserUpdateRequest request) {
+        return ResponseEntity.ok(userService.updateUserByAdmin(id, request));
     }
 
     @DeleteMapping("/{id}")

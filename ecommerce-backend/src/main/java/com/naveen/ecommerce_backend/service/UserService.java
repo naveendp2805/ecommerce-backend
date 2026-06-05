@@ -1,9 +1,8 @@
 package com.naveen.ecommerce_backend.service;
 
-import com.naveen.ecommerce_backend.dto.user.LoginRequest;
-import com.naveen.ecommerce_backend.dto.user.RegisterRequest;
-import com.naveen.ecommerce_backend.dto.user.UserMapper;
-import com.naveen.ecommerce_backend.dto.user.UserResponseDto;
+import com.naveen.ecommerce_backend.dto.user.*;
+import com.naveen.ecommerce_backend.exception.ResourceNotFoundException;
+import com.naveen.ecommerce_backend.model.user.Role;
 import com.naveen.ecommerce_backend.model.user.User;
 import com.naveen.ecommerce_backend.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +41,20 @@ public class UserService {
 
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());
+
+        userRepo.save(user);
+
+        return UserMapper.toDto(user);
+    }
+
+    public UserResponseDto updateUserByAdmin(Long id, AdminUserUpdateRequest request) {
+
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setRole(Role.valueOf(request.getRole()));
 
         userRepo.save(user);
 

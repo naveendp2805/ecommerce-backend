@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -105,6 +107,8 @@ public class OrderService {
 
         return OrderResponse.builder()
                 .orderId(savedOrder.getId())
+                .customerName(order.getUser().getName())
+                .customerEmail(order.getUser().getEmail())
                 .orderDate(savedOrder.getOrderDate())
                 .orderStatus(savedOrder.getOrderStatus())
                 .items(orderItemResponses)
@@ -139,12 +143,46 @@ public class OrderService {
 
             return OrderResponse.builder()
                     .orderId(order.getId())
+                    .customerName(order.getUser().getName())
+                    .customerEmail(order.getUser().getEmail())
                     .orderDate(order.getOrderDate())
                     .orderStatus(order.getOrderStatus())
                     .items(orderItemResponses)
                     .totalAmount(order.getTotalAmount())
                     .build();
         });
+    }
+
+    public OrderResponse updateOrderStatus(@PathVariable  Long orderId, @RequestParam OrderStatus orderStatus) {
+
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        order.setOrderStatus((orderStatus));
+
+        orderRepo.save(order);
+
+        List<OrderItemResponse> orderItemResponses =
+                order.getOrderItems()
+                        .stream()
+                        .map(item -> OrderItemResponse.builder()
+                                .productId(item.getProduct().getId())
+                                .productName(item.getProduct().getName())
+                                .quantity(item.getQuantity())
+                                .price(item.getPriceAtPurchase())
+                                .subTotal(item.getSubTotal())
+                                .build())
+                        .toList();
+
+        return OrderResponse.builder()
+                .orderId(order.getId())
+                .customerName(order.getUser().getName())
+                .customerEmail(order.getUser().getEmail())
+                .orderDate(order.getOrderDate())
+                .orderStatus(order.getOrderStatus())
+                .items(orderItemResponses)
+                .totalAmount(order.getTotalAmount())
+                .build();
     }
 
 }
