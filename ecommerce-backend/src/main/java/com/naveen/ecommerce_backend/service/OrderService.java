@@ -153,7 +153,7 @@ public class OrderService {
         });
     }
 
-    public OrderResponse updateOrderStatus(@PathVariable  Long orderId, @RequestParam OrderStatus orderStatus) {
+    public OrderResponse updateOrderStatus(Long orderId, OrderStatus orderStatus) {
 
         Order order = orderRepo.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
