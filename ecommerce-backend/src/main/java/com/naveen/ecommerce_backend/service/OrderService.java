@@ -153,6 +153,39 @@ public class OrderService {
         });
     }
 
+    public Page<OrderResponse> getAllOrders(int page, int size, String sortBy) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+
+        Page<Order> orders = orderRepo.findAll(pageable);
+
+        return orders.map(order -> {
+
+            List<OrderItemResponse> orderItems =
+                    order.getOrderItems()
+                            .stream()
+                            .map(item ->
+                                    OrderItemResponse.builder()
+                                            .productId(item.getProduct().getId())
+                                            .productName(item.getProduct().getName())
+                                            .quantity(item.getQuantity())
+                                            .price(item.getPriceAtPurchase())
+                                            .subTotal(item.getSubTotal())
+                                            .build())
+                            .toList();
+
+            return OrderResponse.builder()
+                    .orderId(order.getId())
+                    .customerName(order.getUser().getName())
+                    .customerEmail(order.getUser().getEmail())
+                    .orderDate(order.getOrderDate())
+                    .orderStatus(order.getOrderStatus())
+                    .items(orderItems)
+                    .totalAmount(order.getTotalAmount())
+                    .build();
+        });
+    }
+
     public OrderResponse updateOrderStatus(Long orderId, OrderStatus orderStatus) {
 
         Order order = orderRepo.findById(orderId)

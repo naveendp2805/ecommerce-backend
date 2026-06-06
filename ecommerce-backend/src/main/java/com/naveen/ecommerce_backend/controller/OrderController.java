@@ -5,6 +5,7 @@ import com.naveen.ecommerce_backend.model.order.OrderStatus;
 import com.naveen.ecommerce_backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.ReactiveOffsetScrollPositionHandlerMethodArgumentResolver;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,13 @@ public class OrderController {
                                                            @RequestParam(defaultValue = "orderDate") String sortBy) {
 
         return ResponseEntity.ok(orderService.getMyOrders(authentication, page, size, sortBy));
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<Page<OrderResponse>> getAllOrders(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "5") int size,
+                                                            @RequestParam(defaultValue = "orderDate") String sortBy) {
+        return ResponseEntity.ok(orderService.getAllOrders(page, size, sortBy));
     }
 
     @PutMapping("/{orderId}/status")
